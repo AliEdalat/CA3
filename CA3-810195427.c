@@ -117,16 +117,21 @@ void Replace_Multiple_Space_With_Single(char* input) {
 	}
 }
 void SignUp(char** usernames, char** passwords, char* username, char* password, int* rank) {
-	char** p1;
-	char** p2;
-	if ((p1 = realloc(usernames, sizeof(char*) * (*rank + 1)) != NULL) && (p2 = realloc(passwords, sizeof(char*) * (*rank + 1)) != NULL)) {
+	char** p1=NULL;
+	char** p2=NULL;
+	int t=0;
+	while ((p1 = realloc(usernames, sizeof(char*) * (*rank + 1)) == NULL) && (p2 = realloc(passwords, sizeof(char*) * (*rank + 1)) == NULL))
+	{
+		t++;
+	}
+	
 		usernames[*rank] = (char*)malloc((sizeof(username) / sizeof(char)) + 1);
 		passwords[*rank] = (char*)malloc((sizeof(password) / sizeof(char)) + 1);
-	}
-	strcpy(usernames[*rank], username);
-	strcpy(passwords[*rank], password);
-	(*rank) = (*rank) + 1;
-	printf("%s\n%s\n%d\n", usernames[(*rank) - 1], passwords[(*rank) - 1], *rank);
+		strcpy(usernames[*rank], username);
+		strcpy(passwords[*rank], password);
+		(*rank) = (*rank) + 1;
+		printf("%s\n%s\n%d\n", usernames[(*rank) - 1], passwords[(*rank) - 1], *rank);
+	
 }
 int finduser(char** usernames, char** passwords, char*username, char*password, int*rank) {
 	int i = 0;

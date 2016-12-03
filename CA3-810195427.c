@@ -5,32 +5,55 @@
 #include<stdbool.h>
 
 void new_project(char* project_names, char** projects, int rank) {
-
-	char* ali = (char*)malloc(sizeof(char)*((sizeof(projects[rank]) / sizeof(char)) + (sizeof(project_names) / sizeof(char)) + 1));
+	char** p1 = NULL;
+	char* ali;
+	int len_Project_name = strlen(project_names);
+	int len_project_rank = strlen(projects[rank]);
+	while ((ali = (char*)malloc(sizeof(char)*(len_Project_name+ len_project_rank +2))) == NULL) {
+		free(ali);
+	}
 	strcpy(ali, projects[rank]);
-	realloc(projects, sizeof(char*) * ((sizeof(projects) / sizeof(char*)) + 1));
+	while ((p1 = realloc(projects, sizeof(char*) * (rank+6))) == NULL) {
+		
+	}
 	projects[rank + 1] = " ";
-	projects[rank] = (char*)malloc(sizeof(char)*((sizeof(projects[rank]) / sizeof(char)) + (sizeof(project_names) / sizeof(char)) + 1));
+	projects[rank] = (char*)malloc(sizeof(char)*(len_Project_name+len_project_rank+2));
 	strcat(ali, " ");
 	strcat(ali, project_names);
 	strcpy(projects[rank], ali);
 	printf("%s\n", projects[rank]);
 }
 char* findusername(char* input, char* username) {
-	const char *p1 = strstr(input, " ") + 1;
-	const char *p2 = strstr(p1, " ");
-	size_t len = p2 - p1;
-	username = (char*)malloc(sizeof(char)*(len + 1));
+	const char *p1;
+	const char *p2;
+	while ((p1 = strstr(input, " ") + 1) == NULL) {
+
+	}
+	while ((p2 = strstr(p1, " ")) == NULL) {
+
+	}
+	int len = p2 - p1;
+	while ((username = (char*)malloc(sizeof(char)*(len + 1))) == NULL) {
+		free(username);
+	}
 	strncpy(username, p1, len);
 	username[len] = '\0';
 	printf("%s\n", username);
 	return username;
 }
 char* findpassword(char* input, char* password) {
-	const char *p1 = strstr(input, " ") + 1;
-	const char *p2 = strstr(p1, " ") + 1;
-	size_t len = input + strlen(input) - p2;
-	password = (char*)malloc(sizeof(char)*(len + 1));
+	const char *p1;
+	while ((p1 = strstr(input, " ") + 1) == NULL) {
+
+	}
+	const char *p2;
+	while ((p2 = strstr(p1, " ") + 1) == NULL) {
+
+	}
+	int len = input + strlen(input) - p2;
+	while ((password = (char*)malloc(sizeof(char)*(len + 1))) == NULL) {
+		free(password);
+	}
 	strncpy(password, p2, len);
 	password[len] = '\0';
 	printf("%s\n", password);
@@ -40,7 +63,7 @@ char* findinstruction(char* input, char* instruction) {
 	int i = 0;
 	int model = 0;
 	int len = strlen(input);
-	for (i;i < strlen(input);i++) {
+	for (i;i < len;i++) {
 		if (input[i] == ' ')
 			model++;
 	}
@@ -50,21 +73,27 @@ char* findinstruction(char* input, char* instruction) {
 	}
 	if (model == 2) {
 		const char *p1 = strstr(input, " ");
-		size_t len = p1 - input;
-		instruction = (char*)malloc(sizeof(char)*(len + 1));
+		int len = p1 - input;
+		while ((instruction = (char*)malloc(sizeof(char)*(len + 1)))==NULL) {
+			free(instruction);
+		}
 		strncpy(instruction, input, len);
 		instruction[len] = '\0';
 	}
 	if (model == 1) {
 		const char *p1 = strstr(input, " ");
-		size_t len = p1 - input;
-		instruction = (char*)malloc(sizeof(char)*(len + 1));
+		int len = p1 - input;
+		while ((instruction = (char*)malloc(sizeof(char)*(len + 1))) == NULL) {
+			free(instruction);
+		}
 		strncpy(instruction, input, len);
 		instruction[len] = '\0';
 	}
 	if (model == 0) {
-		size_t len = input;
-		instruction = (char*)malloc(sizeof(char)*(len + 1));
+		int len = strlen(input);
+		while ((instruction = (char*)malloc(sizeof(char)*(len + 1))) == NULL) {
+			free(instruction);
+		}
 		strncpy(instruction, input, len);
 		instruction[len] = '\0';
 	}
@@ -72,9 +101,14 @@ char* findinstruction(char* input, char* instruction) {
 	return instruction;
 }
 char* findprojectname(char* input, char* project) {
-	const char *p1 = strstr(input, " ") + 1;
-	size_t len = input + strlen(input) - p1;
-	project = (char*)malloc(sizeof(char)*(len + 1));
+	const char *p1;
+	while ((p1 = strstr(input, " ") + 1) == NULL) {
+		
+	}
+	int len = input + strlen(input) - p1;
+	while ((project = (char*)malloc(sizeof(char)*(len + 1))) == NULL) {
+		free(project);
+	}
 	strncpy(project, p1, len);
 	project[len] = '\0';
 	printf("%s\n", project);
@@ -84,7 +118,10 @@ char* findprojectname(char* input, char* project) {
 char* getinputasSTRING() {
 	int firstsize = 20;
 	char* input;
-	input = (char*)malloc(sizeof(char)*firstsize);
+	char* p1;
+	while ((input = (char*)malloc(sizeof(char)*firstsize)) == NULL) {
+		free(input);
+	}
 	int i = 0;
 	char letter = '\0';
 	while ((letter = getchar()) != '\n')
@@ -96,7 +133,7 @@ char* getinputasSTRING() {
 	}
 	input[i++] = '\0';
 	return input;
-
+	free(input);
 }
 void Replace_Multiple_Space_With_Single(char* input) {
 	int SizeOfString = 0;
@@ -119,14 +156,15 @@ void Replace_Multiple_Space_With_Single(char* input) {
 void SignUp(char** usernames, char** passwords, char* username, char* password, int* rank) {
 	char** p1=NULL;
 	char** p2=NULL;
-	int t=0;
-	while ((p1 = realloc(usernames, sizeof(char*) * (*rank + 1)) == NULL) && (p2 = realloc(passwords, sizeof(char*) * (*rank + 1)) == NULL))
+	int len_username = strlen(username);
+	int len_password = strlen(password);
+	while ((p1 =( char**)realloc(usernames, sizeof(char*) * (*rank + 6)) == NULL) && (p2 = (char**)realloc(passwords, sizeof(char*) * (*rank + 6)) == NULL))
 	{
-		t++;
+		
 	}
 	
-		usernames[*rank] = (char*)malloc((sizeof(username) / sizeof(char)) + 1);
-		passwords[*rank] = (char*)malloc((sizeof(password) / sizeof(char)) + 1);
+		usernames[*rank] = (char*)malloc(sizeof(char)*(len_username+1));
+		passwords[*rank] = (char*)malloc(sizeof(char)*(len_password+1));
 		strcpy(usernames[*rank], username);
 		strcpy(passwords[*rank], password);
 		(*rank) = (*rank) + 1;
@@ -155,12 +193,11 @@ int finduser(char** usernames, char** passwords, char*username, char*password, i
 		return -1;
 	}
 }
-void checkinstructions(char** usernames, char** passwords, char** projects, char* input, int* state, int* signuprank) {
+void checkinstructions(char** usernames, char** passwords, char** projects, char* input, int* state, int* signuprank,int* rank) {
 	char* instruction = NULL;
 	char* username = NULL;
 	char* password = NULL;
 	char* project = NULL;
-	int rank = 0;
 	bool correct_instruction = false;
 	instruction = findinstruction(input, instruction);
 	if (instruction == NULL) {
@@ -182,7 +219,7 @@ void checkinstructions(char** usernames, char** passwords, char** projects, char
 			password = findpassword(input, password);
 			SignUp(usernames, passwords, username, password, signuprank);
 			*state = 1;
-			rank = (*signuprank) - 1;
+			*rank = (*signuprank) - 1;
 			correct_instruction = true;
 			printf("User %s is added to users.\n", username);
 		}
@@ -209,7 +246,7 @@ void checkinstructions(char** usernames, char** passwords, char** projects, char
 		{
 			username = findusername(input, username);
 			password = findpassword(input, password);
-			if ((rank = finduser(usernames, passwords, username, password, signuprank)) != -1) {
+			if ((*rank = finduser(usernames, passwords, username, password, signuprank)) != -1) {
 				printf("%d\n", finduser(usernames, passwords, username, password, signuprank));
 				printf("Welcome back dear %s!\n", username);
 				*state = 2;
@@ -231,7 +268,7 @@ void checkinstructions(char** usernames, char** passwords, char** projects, char
 	{
 
 		project = findprojectname(input, project);
-		new_project(project, projects, rank);
+		new_project(project, projects, *rank);
 		correct_instruction = true;
 	}
 	/*
@@ -271,17 +308,31 @@ void checkinstructions(char** usernames, char** passwords, char** projects, char
 	}
 	if (correct_instruction == false)
 		printf("error! your instruction is not correct!\n");
-	instruction = NULL;
-	username = NULL;
-	password = NULL;
-	project = NULL;
+	free(instruction);
+	free(username);
+	free(password);
+	free(project);
 }
 
 int main() {
-	char* input = (char*)malloc(sizeof(char));
-	char** usernames = (char**)malloc(sizeof(char*)*2);
-	char** passwords = (char**)malloc(sizeof(char*)*2);
-	char** projects = (char**)malloc(sizeof(char*)*2);
+	char** projects;
+	char** passwords;
+	char** usernames;
+	char* input;
+	while ((input = (char*)malloc(sizeof(char))) == NULL) {
+		free(input);
+	}
+	while ((usernames = (char**)malloc(sizeof(char*) * 5)) == NULL) {
+		free(usernames);
+	}
+	
+	while ((passwords = (char**)malloc(sizeof(char*) * 5)) == NULL) {
+		free(passwords);
+	}
+	
+	while ((projects = (char**)malloc(sizeof(char*) * 5)) == NULL) {
+		free(projects);
+	}
 	projects[0] = " ";
 	int state = 0;
 	int signuprank = 0;
@@ -289,7 +340,7 @@ int main() {
 	while (true)
 	{
 		input = getinputasSTRING();
-		checkinstructions(usernames, passwords, projects, input, &state, &signuprank);
+		checkinstructions(usernames, passwords, projects, input, &state, &signuprank,&rank);
 	}
 	return 0;
 }

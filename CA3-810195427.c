@@ -9,21 +9,22 @@ void new_project(char* project_names, char** projects, int rank) {
 	char* ali;
 	int len_Project_name = strlen(project_names);
 	int len_project_rank = strlen(projects[rank]);
-	while ((ali = (char*)malloc(sizeof(char)*(len_Project_name+ len_project_rank +2))) == NULL) {
-		free(ali);
-	}
+	int first_size = 1;
+	projects[first_size += 1] = " ";
+	ali = (char*)malloc(sizeof(char)*(len_Project_name + len_project_rank + 2));
 	strcpy(ali, projects[rank]);
-	while ((p1 = realloc(projects, sizeof(char*) * (rank+6))) == NULL) {
+	while ((p1 = realloc(projects, sizeof(char*) * (first_size+=2))) == NULL) {
 		
 	}
-	projects[rank + 1] = " ";
 	projects[rank] = (char*)malloc(sizeof(char)*(len_Project_name+len_project_rank+2));
 	strcat(ali, " ");
 	strcat(ali, project_names);
 	strcpy(projects[rank], ali);
 	printf("%s\n", projects[rank]);
+	free(ali);
 }
-char* findusername(char* input, char* username) {
+char* findusername(char* input) {
+	char* username;
 	const char *p1;
 	const char *p2;
 	while ((p1 = strstr(input, " ") + 1) == NULL) {
@@ -34,14 +35,15 @@ char* findusername(char* input, char* username) {
 	}
 	int len = p2 - p1;
 	while ((username = (char*)malloc(sizeof(char)*(len + 1))) == NULL) {
-		free(username);
+		
 	}
 	strncpy(username, p1, len);
 	username[len] = '\0';
 	printf("%s\n", username);
 	return username;
 }
-char* findpassword(char* input, char* password) {
+char* findpassword(char* input ) {
+	char* password;
 	const char *p1;
 	while ((p1 = strstr(input, " ") + 1) == NULL) {
 
@@ -52,14 +54,16 @@ char* findpassword(char* input, char* password) {
 	}
 	int len = input + strlen(input) - p2;
 	while ((password = (char*)malloc(sizeof(char)*(len + 1))) == NULL) {
-		free(password);
+		
 	}
 	strncpy(password, p2, len);
 	password[len] = '\0';
 	printf("%s\n", password);
 	return password;
+	free(password);
 }
-char* findinstruction(char* input, char* instruction) {
+char* findinstruction(char* input) {
+	char* instruction=" ";
 	int i = 0;
 	int model = 0;
 	int len = strlen(input);
@@ -75,7 +79,7 @@ char* findinstruction(char* input, char* instruction) {
 		const char *p1 = strstr(input, " ");
 		int len = p1 - input;
 		while ((instruction = (char*)malloc(sizeof(char)*(len + 1)))==NULL) {
-			free(instruction);
+			
 		}
 		strncpy(instruction, input, len);
 		instruction[len] = '\0';
@@ -84,7 +88,7 @@ char* findinstruction(char* input, char* instruction) {
 		const char *p1 = strstr(input, " ");
 		int len = p1 - input;
 		while ((instruction = (char*)malloc(sizeof(char)*(len + 1))) == NULL) {
-			free(instruction);
+			
 		}
 		strncpy(instruction, input, len);
 		instruction[len] = '\0';
@@ -92,22 +96,24 @@ char* findinstruction(char* input, char* instruction) {
 	if (model == 0) {
 		int len = strlen(input);
 		while ((instruction = (char*)malloc(sizeof(char)*(len + 1))) == NULL) {
-			free(instruction);
+			
 		}
 		strncpy(instruction, input, len);
 		instruction[len] = '\0';
 	}
 	printf("%s\n", instruction);
 	return instruction;
+	free(instruction);
 }
-char* findprojectname(char* input, char* project) {
+char* findprojectname(char* input ) {
+	char* project;
 	const char *p1;
 	while ((p1 = strstr(input, " ") + 1) == NULL) {
 		
 	}
 	int len = input + strlen(input) - p1;
 	while ((project = (char*)malloc(sizeof(char)*(len + 1))) == NULL) {
-		free(project);
+		
 	}
 	strncpy(project, p1, len);
 	project[len] = '\0';
@@ -119,9 +125,7 @@ char* getinputasSTRING() {
 	int firstsize = 20;
 	char* input;
 	char* p1;
-	while ((input = (char*)malloc(sizeof(char)*firstsize)) == NULL) {
-		free(input);
-	}
+	input = (char*)malloc(sizeof(char)*firstsize);
 	int i = 0;
 	char letter = '\0';
 	while ((letter = getchar()) != '\n')
@@ -158,13 +162,12 @@ void SignUp(char** usernames, char** passwords, char* username, char* password, 
 	char** p2=NULL;
 	int len_username = strlen(username);
 	int len_password = strlen(password);
-	while ((p1 =( char**)realloc(usernames, sizeof(char*) * (*rank + 6)) == NULL) && (p2 = (char**)realloc(passwords, sizeof(char*) * (*rank + 6)) == NULL))
-	{
-		
+	int first_size = 1;
+	while ((p1 = (char**)realloc(usernames, sizeof(char*) * (first_size+=2)) == NULL) && (p2 = (char**)realloc(passwords, sizeof(char*) * (first_size+=2)) == NULL)) {
+
 	}
-	
-		usernames[*rank] = (char*)malloc(sizeof(char)*(len_username+1));
-		passwords[*rank] = (char*)malloc(sizeof(char)*(len_password+1));
+	usernames[*rank] = (char*)malloc(sizeof(char)*(len_username + 1)); 
+	passwords[*rank] = (char*)malloc(sizeof(char)*(len_password + 1));
 		strcpy(usernames[*rank], username);
 		strcpy(passwords[*rank], password);
 		(*rank) = (*rank) + 1;
@@ -193,13 +196,34 @@ int finduser(char** usernames, char** passwords, char*username, char*password, i
 		return -1;
 	}
 }
+bool findstring(char* string, char* substring) {
+	int len = strlen(substring);
+	int len2 = strlen(string);
+	char* p1=malloc(sizeof(char)*(len+2));
+	char* p2 = malloc(sizeof(char)*(len2 + 2));
+	bool find = false;
+	strcpy(p1, " ");
+	strcat(p1, substring);
+	strcpy(p2, string);
+	strcat(p2, " ");
+	strcat(p1, " ");
+	if (strstr(p2, p1) != NULL) {
+				find = true;
+	}
+	return find;
+	free(p1);
+	free(p2);
+}
+void projects_status(char**projects,int rank) {
+	printf("\n%s\n", projects[rank]);
+}
 void checkinstructions(char** usernames, char** passwords, char** projects, char* input, int* state, int* signuprank,int* rank) {
 	char* instruction = NULL;
 	char* username = NULL;
 	char* password = NULL;
 	char* project = NULL;
 	bool correct_instruction = false;
-	instruction = findinstruction(input, instruction);
+	instruction = findinstruction(input);
 	if (instruction == NULL) {
 		printf("error! your instruction is not correct!\n");
 		return;
@@ -208,6 +232,7 @@ void checkinstructions(char** usernames, char** passwords, char** projects, char
 	{
 		int spaces = 0;
 		int i = 0;
+		bool find = false;
 		int len = strlen(input);
 		for (i = 0; i < len; i++)
 		{
@@ -215,13 +240,29 @@ void checkinstructions(char** usernames, char** passwords, char** projects, char
 				spaces++;
 		}
 		if (spaces == 2) {
-			username = findusername(input, username);
-			password = findpassword(input, password);
-			SignUp(usernames, passwords, username, password, signuprank);
-			*state = 1;
-			*rank = (*signuprank) - 1;
+			username = findusername(input);
+			password = findpassword(input);
+			if (*signuprank != 0) {
+				for (i = 0; i < *signuprank; i++)
+				{
+					if (strcmp(usernames[i] ,username)==0) {
+						find = true;
+						break;
+					}
+				}
+
+			}
+			if (find==false) {
+				SignUp(usernames, passwords, username, password, signuprank);
+				*state = 1;
+				*rank = (*signuprank) - 1;
+				printf("User %s is added to users.\n", username);
+			}
+			else
+			{
+				printf("I find this username !Please try again!\n ");
+			}
 			correct_instruction = true;
-			printf("User %s is added to users.\n", username);
 		}
 		else
 		{
@@ -244,8 +285,8 @@ void checkinstructions(char** usernames, char** passwords, char** projects, char
 		}
 		if (spaces == 2)
 		{
-			username = findusername(input, username);
-			password = findpassword(input, password);
+			username = findusername(input);
+			password = findpassword(input);
 			if ((*rank = finduser(usernames, passwords, username, password, signuprank)) != -1) {
 				printf("%d\n", finduser(usernames, passwords, username, password, signuprank));
 				printf("Welcome back dear %s!\n", username);
@@ -266,40 +307,86 @@ void checkinstructions(char** usernames, char** passwords, char** projects, char
 	}
 	if ((strcmp(instruction, "new_project") == 0) && (*state == 2 || *state == 1))
 	{
-
-		project = findprojectname(input, project);
-		new_project(project, projects, *rank);
+		int i = 0;
+		bool find = false;
+		char* projectname;
+		int len = strlen(input);
+		int spaces = 0;
+		for ( i = 0; i < len; i++)
+		{
+			if (input[i] == ' ')
+				spaces++;
+		}
+		if (spaces == 1) {
+			project = findprojectname(input);
+			if (findstring(projects[*rank],project)==false) {
+				new_project(project, projects, *rank);
+				printf("New project %s is added for user %s\n", project, usernames[*rank]);
+			}
+			else
+			{
+				printf("I find this project in your projects!\n");
+			}
+		}
+		else
+		{
+			printf("your instruction is not correct!\nnew_project <project's name>\n");
+		}
 		correct_instruction = true;
 	}
-	/*
 	if ((strcmp(instruction, "add_user") == 0)&&(*state==2||*state == 1))
 	{
-	int i = 0;
-	bool find_user = false;
-	int userID = 0;
-	username = findusername(input, username);
-	project = findpassword(input, project);
-	for ( i = 0; i <*rank; i++)
-	{
-	if (username == usernames[i]) {
-	find_user = true;
-	userID = i;
-	break;
-	}
-	}
-	if (find_user == true) {
-	new_project(project, projects, userID);
-	}
-	else
-	{
-	printf("User not found!\n");
-	}
-	correct_instruction = true;
+		int i = 0;
+		bool find_user = false;
+		int userID = 0;
+		int spaces = 0;
+		int len = strlen(input);
+		for (int i = 0; i < len; i++)
+		{
+			if (input[i] == ' ') {
+				spaces++;
+			}
+		}
+		if (spaces == 2) {
+			username = findusername(input);
+			project = findpassword(input);
+			for (i = 0; i < *signuprank; i++)
+			{
+				if (strcmp(username, usernames[i]) == 0) {
+					find_user = true;
+					userID = i;
+					break;
+				}
+			}
+			if (find_user == true) {
+				if (findstring(projects[userID], project) == false && findstring(projects[*rank], project) == true) {
+					new_project(project, projects, userID);
+					printf("New contributer \"%s\" is added to project \"%s\" now!\n",username,project);
+				}
+				else if (findstring(projects[*rank], project) == false) {
+					printf("You can not use \"add_user\".I can not find this project in your projects!\n");
+				}
+				else
+				{
+					printf("I find %s project in %s's projects!\n", project, usernames[userID]);
+				}
+			}
+			else
+			{
+				printf("User not found!\n");
+			}
+		}
+		else
+		{
+			printf("Your instruction is not correct!\nadd_user <username> <project's name>\n");
+		}
+		correct_instruction = true;
 	}
 	if ((strcmp(instruction, "projects_status") == 0) && (*state == 2||*state == 1))
 	{
-	correct_instruction = true;
-	}*/
+		projects_status(projects, *rank);
+		correct_instruction = true;
+	}
 	if ((strcmp(instruction, "logout") == 0) && (*state == 1 || *state == 2))
 	{
 		printf("You signed out successfully. See you soon!\n");
@@ -322,18 +409,29 @@ int main() {
 	while ((input = (char*)malloc(sizeof(char))) == NULL) {
 		free(input);
 	}
-	while ((usernames = (char**)malloc(sizeof(char*) * 5)) == NULL) {
+	while ((usernames = (char**)malloc(sizeof(char*) * 10)) == NULL) {
 		free(usernames);
 	}
 	
-	while ((passwords = (char**)malloc(sizeof(char*) * 5)) == NULL) {
+	while ((passwords = (char**)malloc(sizeof(char*) * 10)) == NULL) {
 		free(passwords);
 	}
 	
-	while ((projects = (char**)malloc(sizeof(char*) * 5)) == NULL) {
+	while ((projects = (char**)malloc(sizeof(char*) * 10)) == NULL) {
 		free(projects);
 	}
-	projects[0] = " ";
+	for (int i = 0; i < 10; i++)
+	{
+		projects[i] = " ";
+	}
+	for (int i = 0; i < 10; i++)
+	{
+		usernames[i] = " ";
+	}
+	for (int i = 0; i < 10; i++)
+	{
+		passwords[i] = " ";
+	}
 	int state = 0;
 	int signuprank = 0;
 	int rank = 0;

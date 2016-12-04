@@ -215,7 +215,7 @@ bool findstring(char* string, char* substring) {
 	free(p2);
 }
 void projects_status(char**projects,int rank) {
-	printf("\n%s\n", projects[rank]);
+	printf("Your projects :%s\n", projects[rank]);
 }
 void checkinstructions(char** usernames, char** passwords, char** projects, char* input, int* state, int* signuprank,int* rank) {
 	char* instruction = NULL;
@@ -358,13 +358,16 @@ void checkinstructions(char** usernames, char** passwords, char** projects, char
 					break;
 				}
 			}
-			if (find_user == true) {
+			if (find_user == true && username!=" " && project!=" ") {
 				if (findstring(projects[userID], project) == false && findstring(projects[*rank], project) == true) {
 					new_project(project, projects, userID);
 					printf("New contributer \"%s\" is added to project \"%s\" now!\n",username,project);
 				}
 				else if (findstring(projects[*rank], project) == false) {
 					printf("You can not use \"add_user\".I can not find this project in your projects!\n");
+				}
+				else if (username == " " && project == " ") {
+					printf("your instruction is not correct!\n");
 				}
 				else
 				{

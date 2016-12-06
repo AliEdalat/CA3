@@ -483,6 +483,7 @@ int main() {
 	int first_size = 0;
 	char*** p1;
 	char*** p2;
+	char** p3;
 	while (true)
 	{
 		input = getinputasSTRING();
@@ -494,6 +495,7 @@ int main() {
 			int firstsize = rank + 3;
 			p1[0] = (char**)malloc(sizeof(char*) * firstsize);
 			p2[0] = (char**)malloc(sizeof(char*) * firstsize);
+			p3 = (char**)malloc(sizeof(char*) * firstsize);
 			for (int i = 0; i < firstsize; i++)
 			{
 				int size = strlen(usernames[0][i]);
@@ -506,29 +508,43 @@ int main() {
 				p2[0][i] = (char*)malloc(sizeof(char)*(size + 1));
 				strcpy(p2[0][i], passwords[0][i]);
 			}
+			for (int i = 0; i < firstsize; i++)
+			{
+				int size = strlen(projects[i]);
+				p3[i] = (char*)malloc(sizeof(char)*(size + 1));
+				strcpy(p3[i], projects[i]);
+			}
 			first_size += 10;
 			usernames[0] = (char**)malloc(sizeof(char*)*(first_size));
 			passwords[0] = (char**)malloc(sizeof(char*)*(first_size));
+			projects = (char**)malloc(sizeof(char*)*(first_size));
 			for ( int i = 0;  i < first_size;  i++)
 			{
 				if (i <= (firstsize-1)) {
 					int size_p1 = strlen(p1[0][i]);
 					int size_p2 = strlen(p2[0][i]);
+					int size_p3 = strlen(p3[i]);
 					usernames[0][i] = malloc(sizeof(char)*(size_p1 + 1));
 					passwords[0][i] = malloc(sizeof(char)*(size_p2 + 1));
+					projects[i] = malloc(sizeof(char)*(size_p3 + 1));
 					strcpy(usernames[0][i], p1[0][i]);
 					strcpy(passwords[0][i], p2[0][i]);
+					strcpy(projects[i], p3[i]);
 					usernames[0][i][size_p1] = '\0';
 					passwords[0][i][size_p2] = '\0';
+					projects[i][size_p3] = '\0';
 				}
 				else
 				{
 					usernames[0][i] = malloc(sizeof(char) * 3);
 					passwords[0][i] = malloc(sizeof(char) * 3);
+					projects[i] = malloc(sizeof(char) * 3);
 					strcpy(usernames[0][i], "");
 					strcpy(passwords[0][i], "");
+					strcpy(projects[i], "");
 					usernames[0][i][1] = '\0';
 					passwords[0][i][1] = '\0';
+					projects[i][1] = '\0';
 				}
 			}
 		}

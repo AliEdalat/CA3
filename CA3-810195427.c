@@ -268,13 +268,13 @@ void checkinstructions(char*** usernames, char*** passwords, char** projects, ch
 				}
 
 			}
-			if (find==false && strcmp(username,"")!=0 && strcmp(password,"") != 0) {
+			if (find==false && strcmp(username,"")!=0 && strcmp(password,"") != 0 && strcmp(username, " ") != 0 && strcmp(password, " ") != 0) {
 				SignUp(usernames, passwords, username, password, signuprank);
 				*state = 1;
 				*rank = (*signuprank) - 1;
 				printf("User %s is added to users.\n", username);
 			}
-			else if (strcmp(username,"") == 0 && strcmp(password,"") == 0) {
+			else if (strcmp(username,"") == 0 || strcmp(password,"") == 0 || strcmp(username, " ") == 0 || strcmp(password, " ") == 0) {
 				printf("Your instruction is not correct!\nsignup <username> <password>\n");
 				return;
 			}
@@ -309,13 +309,13 @@ void checkinstructions(char*** usernames, char*** passwords, char** projects, ch
 		{
 			username = findusername(input);
 			password = findpassword(input);
-			if ((*rank = finduser(usernames[0], passwords[0], username, password, signuprank)) != -1 &&strcmp(username,"")!=0 &&strcmp(password,"")!=0) {
+			if ((*rank = finduser(usernames[0], passwords[0], username, password, signuprank)) != -1 &&strcmp(username,"")!=0 &&strcmp(password,"")!=0 && strcmp(username, " ") != 0 && strcmp(password, " ") != 0) {
 				printf("%d\n", finduser(usernames[0], passwords[0], username, password, signuprank));
 				printf("Welcome back dear %s!\n", username);
 				*state = 2;
 				correct_instruction = true;
 			}
-			else if (strcmp(username, "") == 0 && strcmp(password, "") == 0) {
+			else if (strcmp(username, "") == 0 || strcmp(password, "") == 0 || strcmp(username, " ") == 0 || strcmp(password, " ") == 0) {
 				printf("your instruction is not correct!\nlogin <username> <password>\n");
 				return;
 			}
@@ -344,9 +344,13 @@ void checkinstructions(char*** usernames, char*** passwords, char** projects, ch
 		}
 		if (spaces == 1) {
 			project = findprojectname(input);
-			if (findstring(projects[*rank],project)==false) {
+			if (findstring(projects[*rank],project)==false && strcmp(project,"")!=0 && strcmp(project, " ") != 0) {
 				new_project(project, projects, *rank);
 				printf("New project %s is added for user %s\n", project, usernames[0][*rank]);
+			}
+			else if (strcmp(project, "") == 0 || strcmp(project, " ") == 0)
+			{
+				printf("your instruction is not correct!\nnew_project <project's name>\n");
 			}
 			else
 			{
@@ -385,17 +389,21 @@ void checkinstructions(char*** usernames, char*** passwords, char** projects, ch
 					break;
 				}
 			}
-			if (find_user == true && username!=" " && project!=" ") {
-				if (findstring(projects[userID], project) == false && findstring(projects[*rank], project) == true) {
+			if (find_user == true && strcmp(username," ")!=0 && strcmp(project," ")!=0 &&strcmp(project ,"")!=0&&strcmp(username, "")!=0) {
+				if (findstring(projects[userID], project) == false && findstring(projects[*rank], project) == true && strcmp(usernames[0][*rank],username)!=0) {
 					new_project(project, projects, userID);
 					printf("New contributer \"%s\" is added to project \"%s\" now!\n",username,project);
+				}
+				else if (strcmp(usernames[0][*rank], username) == 0)
+				{
+					printf("You can use \"add_user\" for add users to your projects but you can not use it for add yourself!\n");
 				}
 				else if (findstring(projects[*rank], project) == false) {
 					printf("You can not use \"add_user\".I can not find this project in your projects!\n");
 					return;
 				}
-				else if (username == " " && project == " ") {
-					printf("your instruction is not correct!\n");
+				else if (strcmp(username, " ") == 0 || strcmp(project, " ") == 0 || strcmp(project, "") == 0 || strcmp(username, "") == 0) {
+					printf("your instruction is not correct!\nadd_user <username> <project's name>\n");
 					return;
 				}
 				else
@@ -406,7 +414,7 @@ void checkinstructions(char*** usernames, char*** passwords, char** projects, ch
 			}
 			else
 			{
-				printf("User not found!\n");
+				printf("User not found!\nadd_user <username> <project's name>\n");
 				return;
 			}
 		}
